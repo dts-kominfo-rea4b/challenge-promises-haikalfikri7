@@ -3,38 +3,17 @@ const { promiseTheaterIXX, promiseTheaterVGC } = require("./external.js");
 // TODO: Buat fungsi promiseOutput sesuai ketentuan readme
 //const promiseOutput = null;
 
-function getXXI(emosi) {
-  return new Promise(resolve => {
-    const theaterIXX = promiseTheaterIXX();
-    const film1 = theaterIXX.then((data) => {
-      const count = data.filter(item => item.hasil == emosi).length;
-      resolve(count)
-    });
-  });
-}
+const promiseOutput = async (hasil)  => {
+  try{
+    const theaterIXX = await promiseTheaterIXX();
+    const theaterVGC = await promiseTheaterVGC();
+    const arrTheater = [...theaterIXX, ...theaterVGC];
 
-function getVGC(emosi) {
-  return new Promise(resolve => {
-    const theaterIXX = promiseTheaterIXX();
-    const film1 = theaterIXX.then((data) => {
-      const count = data.filter(item => item.hasil == emosi).length;
-      resolve(count)
-    });
-  });
-}
-
-function promiseOutput(emosi) {
-  return new Promise(resolve => {
-    const ixxPromise = getIXX(emosi);
-    const vgcPromise = getVGC(emosi);
-    Promise.all([ixxPromise, vgcPromise]).then(([hasil1, hasil2]) => {
-      resolve(hasil1 + hasil2)
-    })
-  })
-}
-
-const output = promiseOutput('marah');
-output.then(respon => console.log("Jumlah :", respon))
+    return arrTheater.filter((item) => item.hasil === hasil).length;
+  } catch(error) {
+    console.log(error.message);
+  }
+};
 
 
 module.exports = {
